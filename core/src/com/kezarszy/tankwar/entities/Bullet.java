@@ -10,15 +10,15 @@ public class Bullet {
     public static final float SPEED = 5f;
 
     private float x,y;
-    private float centerX, centerY;
+    private float originX, originY;
     private float angle;
 
     private Texture bullet;
     private TextureRegion bulletRegion;
 
-    public Bullet(float x,float y, float centerX, float centerY, float angle){
+    public Bullet(float x,float y, float originX, float originY, float angle){
         this.x = x; this.y = y;
-        this.centerX = centerX; this.centerY = centerY;
+        this.originX = originX; this.originY = originY;
         this.angle = angle;
 
         bullet = new Texture("bulletBlue.png");
@@ -31,7 +31,7 @@ public class Bullet {
     }
 
     public void draw(SpriteBatch sb){
-        sb.draw(bulletRegion, this.x, this.y, (bullet.getWidth()*SIZE)/2, (bullet.getHeight()*SIZE)/2,
+        sb.draw(bulletRegion, this.x, this.y, originX, originY,
                 bullet.getWidth()*SIZE, bullet.getHeight()*SIZE,1,1,angle);
     }
 }
