@@ -1,27 +1,21 @@
 package com.kezarszy.tankwar;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.kezarszy.tankwar.entities.Tank;
-import com.kezarszy.tankwar.levels.Level;
+import com.kezarszy.tankwar.states.GameStateManager;
+import com.kezarszy.tankwar.states.PlayState;
 
 public class Game {
 
-    public Tank tank;
-    public Level level;
+    private GameStateManager gsm;
 
     public Game(){
-        tank = new Tank(0,0);
-        level = new Level();
-
+        gsm = new GameStateManager();
+        gsm.push(new PlayState(gsm));
     }
 
-    public void update(){
-        tank.update();
-    }
+    public void update(){ gsm.update(); }
 
     public void draw(SpriteBatch sb){
-
-        tank.draw(sb);
-        level.render(sb);
+        gsm.render(sb);
     }
 }
