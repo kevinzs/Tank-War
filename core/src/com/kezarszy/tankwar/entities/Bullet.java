@@ -31,7 +31,9 @@ public class Bullet {
     }
 
     public void draw(SpriteBatch sb){
+        sb.begin();
         sb.draw(bulletRegion, this.x, this.y, originX, originY,
                 bullet.getWidth()*SIZE, bullet.getHeight()*SIZE,1,1,angle);
+        sb.end();
     }
 }

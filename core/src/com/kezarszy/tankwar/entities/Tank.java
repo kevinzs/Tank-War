@@ -68,6 +68,14 @@ public class Tank {
         canonPoly.setOrigin(this.x + auxX, this.y + auxY + (CANON_HEIGHT*SIZE-3)/2);
     }
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
     public void update(){
         // PLAYER MOVEMENT LOGIC
         this.dirx = Math.cos(Math.toRadians(angle));
@@ -116,8 +124,10 @@ public class Tank {
         for(int i=0; i<bullets.size(); i++)
             bullets.get(i).draw(sb);
 
+        sb.begin();
         sb.draw(tankRegion, this.x, this.y, (tank.getWidth()*SIZE-10)/2, (tank.getHeight()*SIZE)/2,
                 tank.getWidth()*SIZE, tank.getHeight()*SIZE,1,1,angle);
+        sb.end();
 
         if(debug){
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
