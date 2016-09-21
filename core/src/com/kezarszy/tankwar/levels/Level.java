@@ -3,6 +3,7 @@ package com.kezarszy.tankwar.levels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.viewport.*;
 import com.uwsoft.editor.renderer.SceneLoader;
@@ -34,6 +35,7 @@ public class Level {
     public void render(SpriteBatch sb){
         sceneLoader.getEngine().update(Gdx.graphics.getDeltaTime());
 
+        shapeRenderer.setProjectionMatrix(sb.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(0, 1, 0, 0);
         for(int i=0; i<10; i++)
