@@ -38,12 +38,13 @@ public class Level {
         shapeRenderer.setProjectionMatrix(sb.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(0, 1, 0, 0);
-        for(int i=0; i<10; i++)
+        for(int i=0; i<colisionPoly.size(); i++)
             shapeRenderer.polygon(colisionPoly.get(i).getTransformedVertices());
         shapeRenderer.end();
     }
 
     public void colisionShapes(){
+        // SAND BAGS SHAPES
         for(int i=1; i<11; i++){
             int width = 66, height = 44;
             TransformComponent aux = root.getChild("sandBag"+i).getEntity().getComponent(TransformComponent.class);
@@ -51,6 +52,20 @@ public class Level {
                 aux.x, aux.y + height,
                 aux.x + width, aux.y + height,
                 aux.x + width, aux.y};
+            Polygon poly = new Polygon(polyVertices);
+            poly.setOrigin(aux.x + width/2, aux.y + height/2);
+            poly.setRotation(aux.rotation);
+            colisionPoly.add(poly);
+        }
+
+        // BARRELS SHAPES
+        for(int i=1; i<7; i++){
+            int width = 44, height = 62;
+            TransformComponent aux = root.getChild("barrel"+i).getEntity().getComponent(TransformComponent.class);
+            float[] polyVertices = new float[]{aux.x, aux.y,
+                    aux.x, aux.y + height,
+                    aux.x + width, aux.y + height,
+                    aux.x + width, aux.y};
             Polygon poly = new Polygon(polyVertices);
             poly.setOrigin(aux.x + width/2, aux.y + height/2);
             poly.setRotation(aux.rotation);
