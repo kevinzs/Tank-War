@@ -13,6 +13,7 @@ public class PlayState extends State {
         super(gsm);
         tank = new Tank(100,100);
         level = new Level(this.viewport);
+        tank.setLevel(level);
     }
 
     public void update(){

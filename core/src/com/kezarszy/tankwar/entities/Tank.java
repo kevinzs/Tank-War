@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
+import com.kezarszy.tankwar.levels.Level;
 
 import java.util.ArrayList;
 
@@ -27,6 +29,8 @@ public class Tank {
     private Texture tank;
     private TextureRegion tankRegion;
 
+    private Level level;
+
     private ArrayList<Bullet> bullets;
 
     private long firingTimer;
@@ -37,6 +41,7 @@ public class Tank {
     private Polygon canonPoly;
     private float[] canonVertices;
     private float[] canonTransformedVertices;
+    private Polygon aux;
     private ShapeRenderer shapeRenderer;
 
     public Tank(int x, int y) {
@@ -60,12 +65,15 @@ public class Tank {
 
 
         int auxX = 26, auxY = 23;
-        canonVertices = polyVertices = new float[]{this.x + auxX, this.y + auxY,
+        canonVertices = new float[]{this.x + auxX, this.y + auxY,
                 this.x + auxX, this.y + auxY + CANON_HEIGHT * SIZE - 3,
                 this.x + auxX + CANON_WIDTH * SIZE - 3, this.y + auxY + CANON_HEIGHT * SIZE - 3,
                 this.x + auxX + CANON_WIDTH * SIZE - 3, this.y + auxY};
         canonPoly = new Polygon(canonVertices);
         canonPoly.setOrigin(this.x + auxX, this.y + auxY + (CANON_HEIGHT*SIZE-3)/2);
+
+        aux = new Polygon(polyVertices);
+        aux.setOrigin(this.x + (tank.getWidth()*SIZE-10)/2, this.y + (tank.getHeight()*SIZE)/2);
     }
 
     public float getX() {
@@ -76,21 +84,32 @@ public class Tank {
         return y;
     }
 
+    public void setLevel(Level level) {this.level = level;}
+
     public void update(){
         // PLAYER MOVEMENT LOGIC
         this.dirx = Math.cos(Math.toRadians(angle));
         this.diry = Math.sin(Math.toRadians(angle));
+
         if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-            this.x += this.dirx * SPEED;
-            this.y += this.diry * SPEED;
-            colisionPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
-            canonPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
+            aux.setPosition(colisionPoly.getX(), colisionPoly.getY());
+            aux.translate((float) (this.dirx * SPEED), (float) (this.diry * SPEED));
+            if(!collisionDetection(aux)){
+                this.x += this.dirx * SPEED;
+                this.y += this.diry * SPEED;
+                colisionPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
+                canonPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
+            }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            this.x -= this.dirx * SPEED;
-            this.y -= this.diry * SPEED;
-            colisionPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
-            canonPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
+            aux.setPosition(colisionPoly.getX(), colisionPoly.getY());
+            aux.translate((float) (- this.dirx * SPEED), (float) (- this.diry * SPEED));
+            if(!collisionDetection(aux)){
+                this.x -= this.dirx * SPEED;
+                this.y -= this.diry * SPEED;
+                colisionPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
+                canonPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
+            }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             angle = (angle + ROTATION_SPEED) % 360;
@@ -99,6 +118,7 @@ public class Tank {
             if(angle >= 0) angle -= ROTATION_SPEED;
             else angle = 360;
         }
+
         if(Gdx.input.isKeyJustPressed(Input.Keys.B))
             debug = !debug;
 
@@ -118,6 +138,7 @@ public class Tank {
 
         colisionPoly.setRotation(angle);
         canonPoly.setRotation(angle);
+        aux.setRotation(angle);
     }
 
     public void draw(SpriteBatch sb){
@@ -134,7 +155,17 @@ public class Tank {
             shapeRenderer.setColor(0, 1, 0, 0);
             shapeRenderer.polygon(colisionPoly.getTransformedVertices());
             shapeRenderer.polygon(canonPoly.getTransformedVertices());
+            shapeRenderer.polygon(aux.getTransformedVertices());
             shapeRenderer.end();
         }
+    }
+
+    public boolean collisionDetection(Polygon poly){
+        ArrayList<Polygon> shapes = level.getColisionPoly();
+        Polygon pol = new Polygon();
+        for(int i=0; i<shapes.size(); i++)
+            if(Intersector.intersectPolygons(poly, shapes.get(i),pol))
+                return true;
+        return false;
     }
 }
