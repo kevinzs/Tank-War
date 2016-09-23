@@ -160,7 +160,7 @@ public class Tank {
         ArrayList<Polygon> shapes = level.getColisionPoly();
         Polygon pol = new Polygon();
         for(int i=0; i<shapes.size(); i++)
-            if(Intersector.intersectPolygons(poly, shapes.get(i),pol))
+            if(Intersector.overlapConvexPolygons(poly, shapes.get(i)))
                 return true;
         return false;
     }
