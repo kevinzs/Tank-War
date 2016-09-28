@@ -1,12 +1,12 @@
 package com.kezarszy.tankwar;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.kezarszy.tankwar.entities.Tank;
 import com.kezarszy.tankwar.states.GameStateManager;
 import com.kezarszy.tankwar.states.PlayState;
 
 public class Game {
 
+    public static final boolean DEBUG = true;
     private GameStateManager gsm;
 
     public Game(){
