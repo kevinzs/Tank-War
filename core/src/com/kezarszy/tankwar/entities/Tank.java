@@ -131,6 +131,7 @@ public class Tank {
 
         for(int i=0; i<bullets.size(); i++)
             bullets.get(i).update();
+        bulletCollisionDetection();
 
         collisionPoly.setRotation(angle);
         canonPoly.setRotation(angle);
@@ -158,10 +159,19 @@ public class Tank {
 
     public boolean collisionDetection(Polygon poly){
         ArrayList<Polygon> shapes = level.getColisionPoly();
-        Polygon pol = new Polygon();
         for(int i=0; i<shapes.size(); i++)
             if(Intersector.overlapConvexPolygons(poly, shapes.get(i)))
                 return true;
         return false;
+    }
+
+    public void bulletCollisionDetection(){
+        ArrayList<Polygon> shapes = level.getColisionPoly();
+        for(int i=0; i<bullets.size(); i++)
+            for(int j=0; j<shapes.size(); j++)
+                if(Intersector.overlapConvexPolygons(bullets.get(i).getBulletPoly(), shapes.get(j))){
+                    bullets.remove(i);
+                    break;
+                }
     }
 }
