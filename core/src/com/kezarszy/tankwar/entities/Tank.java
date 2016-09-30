@@ -50,7 +50,10 @@ public class Tank {
         angle = 0;
         this.isPlayer = isPlayer;
 
-        tank = new Texture("tankBlue.png");
+        if(isPlayer)
+            tank = new Texture("tankBlue.png");
+        else
+            tank = new Texture("tankRed.png");
         tankRegion = new TextureRegion(tank);
 
         bullets = new ArrayList<Bullet>();
@@ -131,7 +134,7 @@ public class Tank {
                     firingTimer = System.nanoTime();
                     canonTransformedVertices = canonPoly.getTransformedVertices();
                     bullets.add(new Bullet(canonTransformedVertices[0], canonTransformedVertices[1],
-                            0, 0, angle));
+                            0, 0, angle, true));
                 }
             }
         }
