@@ -24,6 +24,7 @@ public class PlayState extends State {
         tanks = new ArrayList<Tank>();
         tanks.add(new Tank(100,100,true));
         tanks.get(0).setPlayerMode();
+        hud.setPlayer(tanks.get(0));
         tanks.add(new Tank(300,500,false));
         for(Tank tank: tanks)
             tank.setLevel(level);
@@ -31,8 +32,13 @@ public class PlayState extends State {
 
     public void update(){
         super.update();
-        for(Tank tank: tanks)
-            tank.update();
+        for(Tank tank: tanks) {
+            tank.update(tanks);
+            if(!tank.getIsAlive()){
+                tanks.remove(tank);
+                break;
+            }
+        }
         updateCam();
     }
 

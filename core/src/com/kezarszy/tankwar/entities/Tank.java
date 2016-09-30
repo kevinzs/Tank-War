@@ -21,11 +21,11 @@ public class Tank {
     public static final int CANON_WIDTH = 58;
     public static final int CANON_HEIGHT = 24;
 
-    private boolean isPlayer;
+    private boolean isPlayer, isAlive;
 
     private float x, y;
     private double dirx, diry;
-    private int angle;
+    private int angle, health;
 
     private Texture tank;
     private TextureRegion tankRegion;
@@ -47,8 +47,9 @@ public class Tank {
 
     public Tank(int x, int y, boolean isPlayer) {
         this.x = x; this.y = y;
-        angle = 0;
+        this.angle = 0; this.health = 100;
         this.isPlayer = isPlayer;
+        this.isAlive = true;
 
         if(isPlayer)
             tank = new Texture("tankBlue.png");
@@ -93,7 +94,16 @@ public class Tank {
 
     public boolean isPlayer() {return this.isPlayer;}
 
-    public void update(){
+    public int getHealth() {return this.health;}
+    public void setHealth(int health) {this.health = health;}
+
+    public boolean getIsAlive() {return this.isAlive;}
+
+    public Polygon getCollisionPoly() {return this.collisionPoly;}
+
+    public ArrayList<Bullet> getBullets() {return this.bullets;}
+
+    public void update(ArrayList<Tank> tanks){
         // PLAYER MOVEMENT LOGIC
         this.dirx = Math.cos(Math.toRadians(angle));
         this.diry = Math.sin(Math.toRadians(angle));
@@ -102,7 +112,7 @@ public class Tank {
             if(Gdx.input.isKeyPressed(Input.Keys.UP)){
                 collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
                 collisionPrediction.translate((float) (this.dirx * SPEED), (float) (this.diry * SPEED));
-                if(!collisionDetection(collisionPrediction)){
+                if(!collisionDetection(collisionPrediction,tanks)){
                     this.x += this.dirx * SPEED;
                     this.y += this.diry * SPEED;
                     collisionPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
@@ -112,7 +122,7 @@ public class Tank {
             if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
                 collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
                 collisionPrediction.translate((float) (- this.dirx * SPEED), (float) (- this.diry * SPEED));
-                if(!collisionDetection(collisionPrediction)){
+                if(!collisionDetection(collisionPrediction, tanks)){
                     this.x -= this.dirx * SPEED;
                     this.y -= this.diry * SPEED;
                     collisionPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
@@ -127,6 +137,8 @@ public class Tank {
                 else angle = 360;
             }
 
+            if(Gdx.input.isKeyJustPressed(Input.Keys.H)) this.health -= 25;
+
             // FIRING LOGIC
             if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
                 long elapsed = (System.nanoTime() - firingTimer) / 1000000;
@@ -139,7 +151,6 @@ public class Tank {
             }
         }
 
-
         for(int i=0; i<bullets.size(); i++)
             bullets.get(i).update();
         bulletCollisionDetection();
@@ -147,6 +158,9 @@ public class Tank {
         collisionPoly.setRotation(angle);
         canonPoly.setRotation(angle);
         collisionPrediction.setRotation(angle);
+
+        tanksCollisionDetection(tanks);
+        if(this.health == 0) isAlive = false;
     }
 
     public void draw(SpriteBatch sb){
@@ -168,11 +182,15 @@ public class Tank {
         }
     }
 
-    public boolean collisionDetection(Polygon poly){
+    public boolean collisionDetection(Polygon poly, ArrayList<Tank> tanks){
         ArrayList<Polygon> shapes = level.getColisionPoly();
         for(int i=0; i<shapes.size(); i++)
             if(Intersector.overlapConvexPolygons(poly, shapes.get(i)))
                 return true;
+        for(Tank tank: tanks)
+            if(!tank.equals(this))
+                if(Intersector.overlapConvexPolygons(poly, tank.getCollisionPoly()))
+                    return true;
         return false;
     }
 
@@ -184,5 +202,19 @@ public class Tank {
                     bullets.remove(i);
                     break;
                 }
+    }
+
+    public void tanksCollisionDetection(ArrayList<Tank> tanks){
+        for(Tank tank: tanks){
+            if(!tank.equals(this)) {
+                ArrayList<Bullet> tankBullets = tank.getBullets();
+                for (Bullet bullet : tankBullets)
+                    if (Intersector.overlapConvexPolygons(this.collisionPoly, bullet.getBulletPoly())) {
+                        setHealth(this.health - 25);
+                        tankBullets.remove(bullet);
+                        break;
+                    }
+            }
+        }
     }
 }
