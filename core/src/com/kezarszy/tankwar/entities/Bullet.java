@@ -23,12 +23,17 @@ public class Bullet {
     private float[] polyVertices;
     private ShapeRenderer shapeRenderer;
 
-    public Bullet(float x,float y, float originX, float originY, float angle){
+    private boolean isPlayer = false;
+
+    public Bullet(float x,float y, float originX, float originY, float angle, boolean isPlayer){
         this.x = x; this.y = y;
         this.originX = originX; this.originY = originY;
-        this.angle = angle;
+        this.angle = angle; this.isPlayer = isPlayer;
 
-        bullet = new Texture("bulletBlue.png");
+        if(this.isPlayer)
+            bullet = new Texture("bulletBlue.png");
+        else
+            bullet = new Texture("bulletRed.png");
         bulletRegion = new TextureRegion(bullet);
 
         shapeRenderer = new ShapeRenderer();

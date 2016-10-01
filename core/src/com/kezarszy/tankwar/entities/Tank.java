@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Polygon;
 import com.kezarszy.tankwar.Game;
 import com.kezarszy.tankwar.levels.Level;
@@ -22,9 +21,11 @@ public class Tank {
     public static final int CANON_WIDTH = 58;
     public static final int CANON_HEIGHT = 24;
 
+    private boolean isPlayer, isAlive;
+
     private float x, y;
     private double dirx, diry;
-    private int angle;
+    private int angle, health;
 
     private Texture tank;
     private TextureRegion tankRegion;
@@ -44,11 +45,16 @@ public class Tank {
     private Polygon collisionPrediction;
     private ShapeRenderer shapeRenderer;
 
-    public Tank(int x, int y) {
+    public Tank(int x, int y, boolean isPlayer) {
         this.x = x; this.y = y;
-        angle = 0;
+        this.angle = 0; this.health = 100;
+        this.isPlayer = isPlayer;
+        this.isAlive = true;
 
-        tank = new Texture("tankBlue.png");
+        if(isPlayer)
+            tank = new Texture("tankBlue.png");
+        else
+            tank = new Texture("tankRed.png");
         tankRegion = new TextureRegion(tank);
 
         bullets = new ArrayList<Bullet>();
@@ -84,48 +90,64 @@ public class Tank {
     }
 
     public void setLevel(Level level) {this.level = level;}
+    public void setPlayerMode() {this.isPlayer = true;}
 
-    public void update(){
+    public boolean isPlayer() {return this.isPlayer;}
+
+    public int getHealth() {return this.health;}
+    public void setHealth(int health) {this.health = health;}
+
+    public boolean getIsAlive() {return this.isAlive;}
+
+    public Polygon getCollisionPoly() {return this.collisionPoly;}
+
+    public ArrayList<Bullet> getBullets() {return this.bullets;}
+
+    public void update(ArrayList<Tank> tanks){
         // PLAYER MOVEMENT LOGIC
         this.dirx = Math.cos(Math.toRadians(angle));
         this.diry = Math.sin(Math.toRadians(angle));
 
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-            collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
-            collisionPrediction.translate((float) (this.dirx * SPEED), (float) (this.diry * SPEED));
-            if(!collisionDetection(collisionPrediction)){
-                this.x += this.dirx * SPEED;
-                this.y += this.diry * SPEED;
-                collisionPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
-                canonPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
+        if(isPlayer){
+            if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+                collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
+                collisionPrediction.translate((float) (this.dirx * SPEED), (float) (this.diry * SPEED));
+                if(!collisionDetection(collisionPrediction,tanks)){
+                    this.x += this.dirx * SPEED;
+                    this.y += this.diry * SPEED;
+                    collisionPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
+                    canonPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
+                }
             }
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
-            collisionPrediction.translate((float) (- this.dirx * SPEED), (float) (- this.diry * SPEED));
-            if(!collisionDetection(collisionPrediction)){
-                this.x -= this.dirx * SPEED;
-                this.y -= this.diry * SPEED;
-                collisionPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
-                canonPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
+            if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+                collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
+                collisionPrediction.translate((float) (- this.dirx * SPEED), (float) (- this.diry * SPEED));
+                if(!collisionDetection(collisionPrediction, tanks)){
+                    this.x -= this.dirx * SPEED;
+                    this.y -= this.diry * SPEED;
+                    collisionPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
+                    canonPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
+                }
             }
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            angle = (angle + ROTATION_SPEED) % 360;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            if(angle >= 0) angle -= ROTATION_SPEED;
-            else angle = 360;
-        }
+            if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                angle = (angle + ROTATION_SPEED) % 360;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if(angle >= 0) angle -= ROTATION_SPEED;
+                else angle = 360;
+            }
 
-        // FIRING LOGIC
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            long elapsed = (System.nanoTime() - firingTimer) / 1000000;
-            if(elapsed > firingDelay) {
-                firingTimer = System.nanoTime();
-                canonTransformedVertices = canonPoly.getTransformedVertices();
-                bullets.add(new Bullet(canonTransformedVertices[0], canonTransformedVertices[1],
-                        0, 0, angle));
+            if(Gdx.input.isKeyJustPressed(Input.Keys.H)) this.health -= 25;
+
+            // FIRING LOGIC
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                long elapsed = (System.nanoTime() - firingTimer) / 1000000;
+                if(elapsed > firingDelay) {
+                    firingTimer = System.nanoTime();
+                    canonTransformedVertices = canonPoly.getTransformedVertices();
+                    bullets.add(new Bullet(canonTransformedVertices[0], canonTransformedVertices[1],
+                            0, 0, angle, true));
+                }
             }
         }
 
@@ -136,6 +158,9 @@ public class Tank {
         collisionPoly.setRotation(angle);
         canonPoly.setRotation(angle);
         collisionPrediction.setRotation(angle);
+
+        tanksCollisionDetection(tanks);
+        if(this.health == 0) isAlive = false;
     }
 
     public void draw(SpriteBatch sb){
@@ -157,11 +182,15 @@ public class Tank {
         }
     }
 
-    public boolean collisionDetection(Polygon poly){
+    public boolean collisionDetection(Polygon poly, ArrayList<Tank> tanks){
         ArrayList<Polygon> shapes = level.getColisionPoly();
         for(int i=0; i<shapes.size(); i++)
             if(Intersector.overlapConvexPolygons(poly, shapes.get(i)))
                 return true;
+        for(Tank tank: tanks)
+            if(!tank.equals(this))
+                if(Intersector.overlapConvexPolygons(poly, tank.getCollisionPoly()))
+                    return true;
         return false;
     }
 
@@ -173,5 +202,19 @@ public class Tank {
                     bullets.remove(i);
                     break;
                 }
+    }
+
+    public void tanksCollisionDetection(ArrayList<Tank> tanks){
+        for(Tank tank: tanks){
+            if(!tank.equals(this)) {
+                ArrayList<Bullet> tankBullets = tank.getBullets();
+                for (Bullet bullet : tankBullets)
+                    if (Intersector.overlapConvexPolygons(this.collisionPoly, bullet.getBulletPoly())) {
+                        setHealth(this.health - 25);
+                        tankBullets.remove(bullet);
+                        break;
+                    }
+            }
+        }
     }
 }

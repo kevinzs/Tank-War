@@ -6,21 +6,21 @@ filter: Linear,Linear
 repeat: none
 barrelGreysderust
   rotate: false
-  xy: 1004, 228
+  xy: 1518, 733
   size: 44, 62
   orig: 44, 62
   offset: 0, 0
   index: -1
 barrelGreyside
   rotate: false
-  xy: 1616, 940
+  xy: 1106, 379
   size: 44, 62
   orig: 44, 62
   offset: 0, 0
   index: -1
 barrelGreyup
   rotate: false
-  xy: 1104, 394
+  xy: 1707, 954
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
@@ -32,23 +32,41 @@ grass
   orig: 512, 512
   offset: 0, 0
   index: -1
+metalPanel9Patch
+  rotate: false
+  xy: 1004, 341
+  size: 100, 100
+  split: 16, 14, 14, 14
+  pad: 16, 15, 14, 14
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
 oil
   rotate: false
-  xy: 1518, 906
+  xy: 1518, 797
   size: 96, 96
   orig: 96, 96
   offset: 0, 0
   index: -1
+redButton9Patch
+  rotate: false
+  xy: 1004, 443
+  size: 190, 45
+  split: 7, 8, 7, 7
+  pad: 8, 8, 7, 7
+  orig: 190, 45
+  offset: 0, 0
+  index: -1
 sandbagBeige
   rotate: false
-  xy: 1104, 444
+  xy: 1196, 444
   size: 66, 44
   orig: 66, 44
   offset: 0, 0
   index: -1
 sandbagBrown
   rotate: false
-  xy: 1518, 860
+  xy: 1004, 295
   size: 66, 44
   orig: 66, 44
   offset: 0, 0
@@ -62,14 +80,14 @@ terreno
   index: -1
 treeLarge
   rotate: false
-  xy: 1004, 381
+  xy: 1518, 895
   size: 98, 107
   orig: 98, 107
   offset: 0, 0
   index: -1
 treeSmall
   rotate: false
-  xy: 1004, 292
+  xy: 1618, 915
   size: 87, 87
   orig: 87, 87
   offset: 0, 0
