@@ -22,7 +22,7 @@ public class Tank {
     public static final int CANON_WIDTH = 58;
     public static final int CANON_HEIGHT = 24;
 
-    private boolean isPlayer, isAlive;
+    private boolean isPlayer, isAlive, isHurt;
 
     private float x, y;
     private double dirx, diry;
@@ -53,6 +53,7 @@ public class Tank {
         this.angle = 0; this.health = 100;
         this.isPlayer = isPlayer;
         this.isAlive = true;
+        this.isHurt = false;
 
         sounds = new Sounds();
         sounds.loadTankSounds();
@@ -105,6 +106,9 @@ public class Tank {
 
     public boolean getIsAlive() {return this.isAlive;}
 
+    public boolean getIsHurt() {return this.isHurt;}
+    public void setIsHurt(boolean isHurt) {this.isHurt = isHurt;}
+
     public Polygon getCollisionPoly() {return this.collisionPoly;}
 
     public ArrayList<Bullet> getBullets() {return this.bullets;}
@@ -143,7 +147,10 @@ public class Tank {
                 else angle = 360;
             }
 
-            if(Gdx.input.isKeyJustPressed(Input.Keys.H)) this.health -= 25;
+            if(Gdx.input.isKeyJustPressed(Input.Keys.H)){
+                setIsHurt(true);
+                this.health -= 25;
+            }
 
             // FIRING LOGIC
             if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
@@ -221,6 +228,7 @@ public class Tank {
                 for (Bullet bullet : tankBullets)
                     if (Intersector.overlapConvexPolygons(this.collisionPoly, bullet.getBulletPoly())) {
                         setHealth(this.health - 25);
+                        this.setIsHurt(true);
                         tankBullets.remove(bullet);
                         break;
                     }

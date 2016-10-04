@@ -8,6 +8,8 @@ import com.kezarszy.tankwar.sounds.Sounds;
 
 import java.util.ArrayList;
 
+import static com.badlogic.gdx.math.MathUtils.random;
+
 public class PlayState extends State {
 
     private ArrayList<Tank> tanks;
@@ -16,6 +18,14 @@ public class PlayState extends State {
     private HUD hud;
 
     private Sounds sounds;
+
+    private float duration;
+    private float intensity;
+    private float elapsed;
+    private float shakeTimer;
+
+    private float camX;
+    private float camY;
 
     public PlayState(GameStateManager gsm){
         super(gsm);
@@ -46,6 +56,7 @@ public class PlayState extends State {
                 break;
             }
         }
+
         updateCam();
     }
 
@@ -67,7 +78,28 @@ public class PlayState extends State {
                     this.cam.position.set(tank.getX(), cam.position.y, 0);
                 if (tank.getY() > 270 && tank.getY() < 725)
                     this.cam.position.set(cam.position.x, tank.getY(), 0);
+
+                if(tank.getIsHurt()) {
+                    shake(5, 200);
+                    tank.setIsHurt(false);
+                }
             }
         }
+
+        if(elapsed < duration) {
+            float currentPower = intensity * this.cam.zoom * ((duration - elapsed) / duration);
+            float x = (random.nextFloat() - 0.5f) * currentPower;
+            float y = (random.nextFloat() - 0.5f) * currentPower;
+            this.cam.translate(-x, -y);
+            elapsed = (System.nanoTime() - shakeTimer) / 1000000;
+        }
+    }
+
+
+    public void shake(float intensity, float duration) {
+        this.elapsed = 0;
+        this.shakeTimer = System.nanoTime();
+        this.duration = duration;
+        this.intensity = intensity;
     }
 }
