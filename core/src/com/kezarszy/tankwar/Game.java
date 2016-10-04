@@ -6,7 +6,7 @@ import com.kezarszy.tankwar.states.PlayState;
 
 public class Game {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     private GameStateManager gsm;
 
     public Game(){

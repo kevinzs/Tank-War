@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.kezarszy.tankwar.entities.Tank;
 import com.kezarszy.tankwar.hud.HUD;
 import com.kezarszy.tankwar.levels.Level;
+import com.kezarszy.tankwar.sounds.Sounds;
 
 import java.util.ArrayList;
 
@@ -14,10 +15,16 @@ public class PlayState extends State {
 
     private HUD hud;
 
+    private Sounds sounds;
+
     public PlayState(GameStateManager gsm){
         super(gsm);
 
         hud = new HUD();
+
+        sounds = new Sounds();
+        sounds.loadMusic();
+        sounds.playGameMusic();
 
         level = new Level(this.viewport);
 

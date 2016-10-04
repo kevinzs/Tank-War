@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.kezarszy.tankwar.Game;
 import com.kezarszy.tankwar.levels.Level;
+import com.kezarszy.tankwar.sounds.Sounds;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,8 @@ public class Tank {
 
     private Level level;
 
+    private Sounds sounds;
+
     private ArrayList<Bullet> bullets;
 
     private long firingTimer;
@@ -50,6 +53,9 @@ public class Tank {
         this.angle = 0; this.health = 100;
         this.isPlayer = isPlayer;
         this.isAlive = true;
+
+        sounds = new Sounds();
+        sounds.loadTankSounds();
 
         if(isPlayer)
             tank = new Texture("tankBlue.png");
@@ -143,6 +149,7 @@ public class Tank {
             if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
                 long elapsed = (System.nanoTime() - firingTimer) / 1000000;
                 if(elapsed > firingDelay) {
+                    sounds.playShootSound();
                     firingTimer = System.nanoTime();
                     canonTransformedVertices = canonPoly.getTransformedVertices();
                     bullets.add(new Bullet(canonTransformedVertices[0], canonTransformedVertices[1],
@@ -160,7 +167,10 @@ public class Tank {
         collisionPrediction.setRotation(angle);
 
         tanksCollisionDetection(tanks);
-        if(this.health == 0) isAlive = false;
+        if(this.health == 0){
+            sounds.playExplosionSound();
+            isAlive = false;
+        }
     }
 
     public void draw(SpriteBatch sb){
