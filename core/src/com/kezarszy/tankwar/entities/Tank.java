@@ -22,71 +22,46 @@ public class Tank {
     public static final int CANON_WIDTH = 58;
     public static final int CANON_HEIGHT = 24;
 
-    private boolean isPlayer, isAlive, isHurt;
+    protected boolean isAlive, isHurt;
 
-    private float x, y;
-    private double dirx, diry;
-    private int angle, health;
+    protected float x, y;
+    protected double dirx, diry;
+    protected int angle, health;
 
-    private Texture tank;
-    private TextureRegion tankRegion;
+    protected Texture tank;
+    protected TextureRegion tankRegion;
 
     private Level level;
 
-    private Sounds sounds;
+    protected Sounds sounds;
 
-    private ArrayList<Bullet> bullets;
+    protected ArrayList<Bullet> bullets;
 
-    private long firingTimer;
-    private long firingDelay;
+    protected long firingTimer;
+    protected long firingDelay;
 
-    private Polygon collisionPoly;
-    private float[] polyVertices;
-    private Polygon canonPoly;
-    private float[] canonVertices;
-    private float[] canonTransformedVertices;
-    private Polygon collisionPrediction;
-    private ShapeRenderer shapeRenderer;
+    protected Polygon collisionPoly;
+    protected float[] polyVertices;
+    protected Polygon canonPoly;
+    protected float[] canonVertices;
+    protected float[] canonTransformedVertices;
+    protected Polygon collisionPrediction;
+    protected ShapeRenderer shapeRenderer;
 
-    public Tank(int x, int y, boolean isPlayer) {
+    public Tank(int x, int y) {
         this.x = x; this.y = y;
         this.angle = 0; this.health = 100;
-        this.isPlayer = isPlayer;
         this.isAlive = true;
         this.isHurt = false;
 
         sounds = new Sounds();
         sounds.loadTankSounds();
 
-        if(isPlayer)
-            tank = new Texture("tankBlue.png");
-        else
-            tank = new Texture("tankRed.png");
-        tankRegion = new TextureRegion(tank);
-
         bullets = new ArrayList<Bullet>();
         firingTimer = System.nanoTime();
         firingDelay = 500;
 
         shapeRenderer = new ShapeRenderer();
-        polyVertices = new float[]{this.x, this.y,
-                                    this.x, this.y + tank.getHeight() * SIZE,
-                                    this.x + tank.getWidth() * SIZE - 10, this.y + tank.getHeight() * SIZE,
-                                    this.x + tank.getWidth() * SIZE - 10, this.y};
-        collisionPoly = new Polygon(polyVertices);
-        collisionPoly.setOrigin(this.x + (tank.getWidth()*SIZE-10)/2, this.y + (tank.getHeight()*SIZE)/2);
-
-
-        int auxX = 26, auxY = 23;
-        canonVertices = new float[]{this.x + auxX, this.y + auxY,
-                this.x + auxX, this.y + auxY + CANON_HEIGHT * SIZE - 3,
-                this.x + auxX + CANON_WIDTH * SIZE - 3, this.y + auxY + CANON_HEIGHT * SIZE - 3,
-                this.x + auxX + CANON_WIDTH * SIZE - 3, this.y + auxY};
-        canonPoly = new Polygon(canonVertices);
-        canonPoly.setOrigin(this.x + auxX, this.y + auxY + (CANON_HEIGHT*SIZE-3)/2);
-
-        collisionPrediction = new Polygon(polyVertices);
-        collisionPrediction.setOrigin(this.x + (tank.getWidth()*SIZE-10)/2, this.y + (tank.getHeight()*SIZE)/2);
     }
 
     public float getX() {
@@ -97,9 +72,6 @@ public class Tank {
     }
 
     public void setLevel(Level level) {this.level = level;}
-    public void setPlayerMode() {this.isPlayer = true;}
-
-    public boolean isPlayer() {return this.isPlayer;}
 
     public int getHealth() {return this.health;}
     public void setHealth(int health) {this.health = health;}
@@ -117,53 +89,6 @@ public class Tank {
         // PLAYER MOVEMENT LOGIC
         this.dirx = Math.cos(Math.toRadians(angle));
         this.diry = Math.sin(Math.toRadians(angle));
-
-        if(isPlayer){
-            if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-                collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
-                collisionPrediction.translate((float) (this.dirx * SPEED), (float) (this.diry * SPEED));
-                if(!collisionDetection(collisionPrediction,tanks)){
-                    this.x += this.dirx * SPEED;
-                    this.y += this.diry * SPEED;
-                    collisionPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
-                    canonPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
-                }
-            }
-            if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-                collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
-                collisionPrediction.translate((float) (- this.dirx * SPEED), (float) (- this.diry * SPEED));
-                if(!collisionDetection(collisionPrediction, tanks)){
-                    this.x -= this.dirx * SPEED;
-                    this.y -= this.diry * SPEED;
-                    collisionPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
-                    canonPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
-                }
-            }
-            if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                angle = (angle + ROTATION_SPEED) % 360;
-            }
-            if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                if(angle >= 0) angle -= ROTATION_SPEED;
-                else angle = 360;
-            }
-
-            if(Gdx.input.isKeyJustPressed(Input.Keys.H)){
-                setIsHurt(true);
-                this.health -= 25;
-            }
-
-            // FIRING LOGIC
-            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-                long elapsed = (System.nanoTime() - firingTimer) / 1000000;
-                if(elapsed > firingDelay) {
-                    sounds.playShootSound();
-                    firingTimer = System.nanoTime();
-                    canonTransformedVertices = canonPoly.getTransformedVertices();
-                    bullets.add(new Bullet(canonTransformedVertices[0], canonTransformedVertices[1],
-                            0, 0, angle, true));
-                }
-            }
-        }
 
         for(int i=0; i<bullets.size(); i++)
             bullets.get(i).update();

@@ -1,6 +1,8 @@
 package com.kezarszy.tankwar.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.kezarszy.tankwar.entities.Enemy;
+import com.kezarszy.tankwar.entities.Player;
 import com.kezarszy.tankwar.entities.Tank;
 import com.kezarszy.tankwar.hud.HUD;
 import com.kezarszy.tankwar.levels.Level;
@@ -39,10 +41,9 @@ public class PlayState extends State {
         level = new Level(this.viewport);
 
         tanks = new ArrayList<Tank>();
-        tanks.add(new Tank(100,100,true));
-        tanks.get(0).setPlayerMode();
+        tanks.add(new Player(100,100));
         hud.setPlayer(tanks.get(0));
-        tanks.add(new Tank(300,500,false));
+        tanks.add(new Enemy(300,500));
         for(Tank tank: tanks)
             tank.setLevel(level);
     }
@@ -71,7 +72,7 @@ public class PlayState extends State {
 
     public void updateCam(){
         for(Tank tank: tanks) {
-            if(tank.isPlayer()) {
+            if(tank instanceof Player) {
                 if ((tank.getX() > 480 && tank.getX() < 520) && (tank.getY() > 270 && tank.getY() < 725))
                     this.cam.position.set(tank.getX(), tank.getY(), 0);
                 if (tank.getX() > 480 && tank.getX() < 520)
