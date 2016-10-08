@@ -39,20 +39,20 @@ public class Player extends Tank{
     public void update(ArrayList<Tank> tanks){
         super.update(tanks);
 
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
             collisionPrediction.translate((float) (this.dirx * SPEED), (float) (this.diry * SPEED));
-            if(!collisionDetection(collisionPrediction,tanks)){
+            if (!collisionDetection(collisionPrediction, tanks)) {
                 this.x += this.dirx * SPEED;
                 this.y += this.diry * SPEED;
                 collisionPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
                 canonPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
             }
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
-            collisionPrediction.translate((float) (- this.dirx * SPEED), (float) (- this.diry * SPEED));
-            if(!collisionDetection(collisionPrediction, tanks)){
+            collisionPrediction.translate((float) (-this.dirx * SPEED), (float) (-this.diry * SPEED));
+            if (!collisionDetection(collisionPrediction, tanks)) {
                 this.x -= this.dirx * SPEED;
                 this.y -= this.diry * SPEED;
                 collisionPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);

@@ -1,1 +1,1 @@
-{"sceneName":"level2","physicsPropertiesVO":{}}
+{"sceneName":"level2","composite":{"layers":[{"layerName":"Default","isVisible":true}]},"physicsPropertiesVO":{},"verticalGuides":[1000],"horizontalGuides":[756]}
