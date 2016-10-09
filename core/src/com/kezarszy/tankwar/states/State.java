@@ -2,7 +2,11 @@ package com.kezarszy.tankwar.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -11,10 +15,12 @@ import com.kezarszy.tankwar.TankWar;
 
 public abstract class State {
 
-    private GameStateManager gsm;
+    protected GameStateManager gsm;
 
     protected OrthographicCamera cam;
     protected Viewport viewport;
+
+    public AssetManager manager;
 
     protected State(GameStateManager gsm){
         this.gsm = gsm;
@@ -23,19 +29,21 @@ public abstract class State {
         viewport.apply();
 
         cam.position.set(TankWar.WIDTH, TankWar.HEIGHT,0);
+
+        manager = new AssetManager();
     }
 
     protected GameStateManager getGsm() {return this.gsm;}
 
-    public void update(){
-        cam.update();
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            cam.zoom += 0.02;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-            cam.zoom -= 0.02;
-        }
-    }
+    public abstract void update();
 
     public abstract void render(SpriteBatch sb);
+
+    public void loadAssets(){
+        manager.load("tankBlue.png", Texture.class);
+        manager.load("tankRed.png", Texture.class);
+        manager.load("sounds/battleThemeA.mp3", Music.class);
+        manager.load("sounds/missile_explosion.ogg", Sound.class);
+        manager.load("sounds/explode.wav", Sound.class);
+    }
 }

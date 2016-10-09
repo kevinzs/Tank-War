@@ -13,6 +13,8 @@ import com.kezarszy.tankwar.levels.Level;
 import com.kezarszy.tankwar.sounds.Sounds;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class Tank {
     public static final float SIZE = 0.75f;
@@ -31,7 +33,7 @@ public class Tank {
     protected Texture tank;
     protected TextureRegion tankRegion;
 
-    private Level level;
+    protected Level level;
 
     protected Sounds sounds;
 
@@ -61,7 +63,7 @@ public class Tank {
         firingTimer = System.nanoTime();
         firingDelay = 500;
 
-        shapeRenderer = new ShapeRenderer();
+        if(Game.DEBUG) shapeRenderer = new ShapeRenderer();
     }
 
     public float getX() {
@@ -85,7 +87,7 @@ public class Tank {
 
     public ArrayList<Bullet> getBullets() {return this.bullets;}
 
-    public void update(ArrayList<Tank> tanks){
+    public void update(HashMap<String,Tank> tanks){
         // PLAYER MOVEMENT LOGIC
         this.dirx = Math.cos(Math.toRadians(angle));
         this.diry = Math.sin(Math.toRadians(angle));
@@ -98,7 +100,7 @@ public class Tank {
         canonPoly.setRotation(angle);
         collisionPrediction.setRotation(angle);
 
-        tanksCollisionDetection(tanks);
+        tanksCollisionDetection(tanks.values());
         if(this.health == 0){
             sounds.playExplosionSound();
             isAlive = false;
@@ -124,12 +126,12 @@ public class Tank {
         }
     }
 
-    public boolean collisionDetection(Polygon poly, ArrayList<Tank> tanks){
+    public boolean collisionDetection(Polygon poly, HashMap<String,Tank> tanks){
         ArrayList<Polygon> shapes = level.getColisionPoly();
         for(int i=0; i<shapes.size(); i++)
             if(Intersector.overlapConvexPolygons(poly, shapes.get(i)))
                 return true;
-        for(Tank tank: tanks)
+        for(Tank tank: tanks.values())
             if(!tank.equals(this))
                 if(Intersector.overlapConvexPolygons(poly, tank.getCollisionPoly()))
                     return true;
@@ -146,7 +148,7 @@ public class Tank {
                 }
     }
 
-    public void tanksCollisionDetection(ArrayList<Tank> tanks){
+    public void tanksCollisionDetection(Collection<Tank> tanks){
         for(Tank tank: tanks){
             if(!tank.equals(this)) {
                 ArrayList<Bullet> tankBullets = tank.getBullets();

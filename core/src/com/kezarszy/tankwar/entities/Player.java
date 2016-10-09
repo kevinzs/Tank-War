@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends Tank{
 
@@ -36,7 +36,7 @@ public class Player extends Tank{
         collisionPrediction.setOrigin(this.x + (tank.getWidth()*SIZE-10)/2, this.y + (tank.getHeight()*SIZE)/2);
     }
 
-    public void update(ArrayList<Tank> tanks){
+    public void update(HashMap<String,Tank> tanks){
         super.update(tanks);
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {

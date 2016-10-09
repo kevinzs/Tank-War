@@ -2,6 +2,7 @@ package com.kezarszy.tankwar;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.kezarszy.tankwar.states.GameStateManager;
+import com.kezarszy.tankwar.states.LoadingState;
 import com.kezarszy.tankwar.states.PlayState;
 
 public class Game {
@@ -11,7 +12,7 @@ public class Game {
 
     public Game(){
         gsm = new GameStateManager();
-        gsm.push(new PlayState(gsm));
+        gsm.push(new LoadingState(gsm));
     }
 
     public void update(){ gsm.update(); }

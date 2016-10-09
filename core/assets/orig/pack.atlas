@@ -6,21 +6,21 @@ filter: Linear,Linear
 repeat: none
 barrelGreysderust
   rotate: false
-  xy: 1542, 1759
+  xy: 1542, 1702
   size: 44, 62
   orig: 44, 62
   offset: 0, 0
   index: -1
 barrelGreyside
   rotate: false
-  xy: 1130, 1405
+  xy: 1028, 1237
   size: 44, 62
   orig: 44, 62
   offset: 0, 0
   index: -1
 barrelGreyup
   rotate: false
-  xy: 1731, 1980
+  xy: 1288, 1466
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
@@ -48,13 +48,6 @@ metalPanel9Patch
   orig: 100, 100
   offset: 0, 0
   index: -1
-oil
-  rotate: false
-  xy: 1542, 1823
-  size: 96, 96
-  orig: 96, 96
-  offset: 0, 0
-  index: -1
 redButton9Patch
   rotate: false
   xy: 1028, 1469
@@ -73,7 +66,7 @@ sandbagBeige
   index: -1
 sandbagBrown
   rotate: false
-  xy: 1028, 1321
+  xy: 1774, 1984
   size: 66, 44
   orig: 66, 44
   offset: 0, 0
@@ -85,6 +78,41 @@ terreno
   orig: 1000, 1000
   offset: 0, 0
   index: -1
+towerDefensetile132
+  rotate: false
+  xy: 1708, 1964
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+towerDefensetile134
+  rotate: false
+  xy: 1028, 1301
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+towerDefensetile135
+  rotate: false
+  xy: 1130, 1403
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+towerDefensetile136
+  rotate: false
+  xy: 1642, 1964
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+towerDefensetile137
+  rotate: false
+  xy: 1542, 1766
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 treeLarge
   rotate: false
   xy: 1542, 1921
@@ -94,7 +122,7 @@ treeLarge
   index: -1
 treeSmall
   rotate: false
-  xy: 1642, 1941
+  xy: 1542, 1832
   size: 87, 87
   orig: 87, 87
   offset: 0, 0

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kezarszy.tankwar.entities.Player;
 import com.kezarszy.tankwar.entities.Tank;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -19,7 +20,7 @@ public class HUD {
     private SceneLoader sceneLoader;
     private ItemWrapper root;
 
-    private Tank player;
+    private Player player;
 
     public HUD(){
         Viewport viewport = new StretchViewport(960,540);
@@ -28,7 +29,7 @@ public class HUD {
         root = new ItemWrapper(sceneLoader.getRoot());
     }
 
-    public void setPlayer(Tank player) {this.player = player;}
+    public void setPlayer(Player player) {this.player = player;}
 
     public void render() {
         root.getChild("score").getEntity().getComponent(LabelComponent.class).setText("" + 100);
