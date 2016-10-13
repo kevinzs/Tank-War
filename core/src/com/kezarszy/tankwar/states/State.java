@@ -20,30 +20,22 @@ public abstract class State {
     protected OrthographicCamera cam;
     protected Viewport viewport;
 
-    public AssetManager manager;
+    protected AssetManager manager;
 
-    protected State(GameStateManager gsm){
+    protected State(GameStateManager gsm, AssetManager manager){
         this.gsm = gsm;
+        this.manager = manager;
         cam = new OrthographicCamera();
         viewport = new StretchViewport(TankWar.WIDTH, TankWar.HEIGHT,cam);
         viewport.apply();
 
         cam.position.set(TankWar.WIDTH, TankWar.HEIGHT,0);
-
-        manager = new AssetManager();
     }
 
     protected GameStateManager getGsm() {return this.gsm;}
+    public AssetManager getManager() {return this.manager;}
 
     public abstract void update();
-
     public abstract void render(SpriteBatch sb);
-
-    public void loadAssets(){
-        manager.load("tankBlue.png", Texture.class);
-        manager.load("tankRed.png", Texture.class);
-        manager.load("sounds/battleThemeA.mp3", Music.class);
-        manager.load("sounds/missile_explosion.ogg", Sound.class);
-        manager.load("sounds/explode.wav", Sound.class);
-    }
+    public abstract void dispose();
 }

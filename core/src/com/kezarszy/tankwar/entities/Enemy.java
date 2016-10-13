@@ -3,13 +3,16 @@ package com.kezarszy.tankwar.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
+import com.kezarszy.tankwar.states.State;
 
 public class Enemy extends Tank{
 
-    public Enemy(int x, int y){
+    public Enemy(int x, int y, State currentState){
         super(x,y);
+        super.setState(currentState);
 
-        tank = new Texture("tankRed.png");
+        //tank = new Texture("tankRed.png");
+        tank = currentState.getManager().get("tankRed.png", Texture.class);
         tankRegion = new TextureRegion(tank);
 
         polyVertices = new float[]{this.x, this.y,
@@ -30,5 +33,9 @@ public class Enemy extends Tank{
 
         collisionPrediction = new Polygon(polyVertices);
         collisionPrediction.setOrigin(this.x + (tank.getWidth()*SIZE-10)/2, this.y + (tank.getHeight()*SIZE)/2);
+    }
+
+    public void dispose(){
+        tank.dispose();
     }
 }

@@ -1,7 +1,6 @@
 package com.kezarszy.tankwar.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,7 +9,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.kezarszy.tankwar.Game;
 import com.kezarszy.tankwar.levels.Level;
-import com.kezarszy.tankwar.sounds.Sounds;
+import com.kezarszy.tankwar.states.State;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,8 +17,8 @@ import java.util.HashMap;
 
 public class Tank {
     public static final float SIZE = 0.75f;
-    public static final float SPEED = 2f;
-    public static final int ROTATION_SPEED = 2;
+    public static final float SPEED = 1f;
+    public static final int ROTATION_SPEED = 1;
 
     public static final int CANON_WIDTH = 58;
     public static final int CANON_HEIGHT = 24;
@@ -35,7 +34,7 @@ public class Tank {
 
     protected Level level;
 
-    protected Sounds sounds;
+    protected State currentState;
 
     protected ArrayList<Bullet> bullets;
 
@@ -56,9 +55,6 @@ public class Tank {
         this.isAlive = true;
         this.isHurt = false;
 
-        sounds = new Sounds();
-        sounds.loadTankSounds();
-
         bullets = new ArrayList<Bullet>();
         firingTimer = System.nanoTime();
         firingDelay = 500;
@@ -73,6 +69,8 @@ public class Tank {
         return y;
     }
 
+    public void setPosition(int x, int y) {this.x = x; this.y = y;}
+
     public void setLevel(Level level) {this.level = level;}
 
     public int getHealth() {return this.health;}
@@ -86,6 +84,8 @@ public class Tank {
     public Polygon getCollisionPoly() {return this.collisionPoly;}
 
     public ArrayList<Bullet> getBullets() {return this.bullets;}
+
+    public void setState(State state) {this.currentState = state;}
 
     public void update(HashMap<String,Tank> tanks){
         // PLAYER MOVEMENT LOGIC
@@ -102,8 +102,10 @@ public class Tank {
 
         tanksCollisionDetection(tanks.values());
         if(this.health == 0){
-            sounds.playExplosionSound();
+            Sound explosion = currentState.getManager().get("sounds/explode.wav", Sound.class);
+            explosion.play(1.0f);
             isAlive = false;
+            health = -10;
         }
     }
 
@@ -161,5 +163,9 @@ public class Tank {
                     }
             }
         }
+    }
+
+    public void dispose(){
+
     }
 }

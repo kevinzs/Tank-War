@@ -20,4 +20,8 @@ public class Game {
     public void draw(SpriteBatch sb){
         gsm.render(sb);
     }
+
+    public void dispose() {
+        gsm.dispose();
+    }
 }

@@ -23,4 +23,10 @@ public class GameStateManager {
     public void update() {states.peek().update();}
 
     public void render(SpriteBatch sb) {states.peek().render(sb);}
+
+    public void dispose(){
+        for(int i=0; i<states.size(); i++){
+            states.get(0).dispose();
+        }
+    }
 }
