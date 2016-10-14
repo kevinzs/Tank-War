@@ -29,6 +29,8 @@ public class LoadingState extends State{
 
         manager.load("tankBlue.png", Texture.class);
         manager.load("tankRed.png", Texture.class);
+        manager.load("bulletBlue.png", Texture.class);
+        manager.load("bulletRed.png", Texture.class);
         manager.load("sounds/battleThemeA.mp3", Sound.class);
         manager.load("sounds/missile_explosion.ogg", Sound.class);
         manager.load("sounds/explode.wav", Sound.class);

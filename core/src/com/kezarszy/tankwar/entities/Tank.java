@@ -40,6 +40,7 @@ public class Tank {
 
     protected long firingTimer;
     protected long firingDelay;
+    protected boolean firing;
 
     protected Polygon collisionPoly;
     protected float[] polyVertices;
@@ -117,8 +118,10 @@ public class Tank {
         this.dirx = Math.cos(Math.toRadians(angle));
         this.diry = Math.sin(Math.toRadians(angle));
 
-        for(int i=0; i<bullets.size(); i++)
+        for(int i=0; i<bullets.size(); i++) {
             bullets.get(i).update();
+            if(bullets.get(i).getDelete()) bullets.remove(i);
+        }
         bulletCollisionDetection();
 
         collisionPoly.setRotation(angle);
@@ -188,6 +191,25 @@ public class Tank {
                     }
             }
         }
+    }
+
+    public void shooting(boolean shooting){
+        if(shooting) {
+            firing = true;
+            long elapsed = (System.nanoTime() - firingTimer) / 1000000;
+            if (elapsed > firingDelay) {
+                playShootSound();
+                firingTimer = System.nanoTime();
+                canonTransformedVertices = canonPoly.getTransformedVertices();
+                bullets.add(new Bullet((int) canonTransformedVertices[0], (int) canonTransformedVertices[1],
+                        0, 0, angle, currentState.getManager().get("bulletRed.png", Texture.class)));
+            }
+        } else firing = false;
+    }
+
+    public void playShootSound(){
+        Sound shoot = currentState.getManager().get("sounds/missile_explosion.ogg", Sound.class);
+        shoot.play(1.0f);
     }
 
     public void dispose(){

@@ -11,7 +11,6 @@ public class Enemy extends Tank{
         super(x,y);
         super.setState(currentState);
 
-        //tank = new Texture("tankRed.png");
         tank = currentState.getManager().get("tankRed.png", Texture.class);
         tankRegion = new TextureRegion(tank);
 
@@ -33,6 +32,10 @@ public class Enemy extends Tank{
 
         collisionPrediction = new Polygon(polyVertices);
         collisionPrediction.setOrigin(this.x + (tank.getWidth()*SIZE-10)/2, this.y + (tank.getHeight()*SIZE)/2);
+    }
+
+    public void firing(){
+
     }
 
     public void dispose(){

@@ -3,7 +3,9 @@ package com.kezarszy.tankwar.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.kezarszy.tankwar.entities.Bullet;
 import com.kezarszy.tankwar.entities.Enemy;
 import com.kezarszy.tankwar.entities.Player;
 import com.kezarszy.tankwar.entities.Tank;
@@ -128,15 +130,26 @@ public class PlayState extends State {
     public void updateServer(float dt){
         timer += dt;
         Player player = (Player) tanks.get(playerID);
-        if(timer >= UPDATE_TIME && player != null && player.hasMoved()){
-            JSONObject data = new JSONObject();
-            try{
-                data.put("x", player.getX());
-                data.put("y", player.getY());
-                data.put("rotation", player.getRotation());
-                socket.emit("playerMoved", data);
-            } catch(JSONException e){
-                Gdx.app.log("SocketIO", "Error sendind update data");
+        if(timer >= UPDATE_TIME && player != null){
+            if(player.hasMoved()) {
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("x", player.getX());
+                    data.put("y", player.getY());
+                    data.put("rotation", player.getRotation());
+                    socket.emit("playerMoved", data);
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error sendind update data");
+                }
+            }
+            if(player.isShooting()){
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("shooting", true);
+                    socket.emit("playerShooting",data);
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error sendind shooting data");
+                }
             }
         }
     }
@@ -213,6 +226,20 @@ public class PlayState extends State {
                     Gdx.app.log("SocketIO", "Error getting player movement.");
                 }
             }
+        }).on("playerShooting", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String id = data.getString("id");
+                    boolean shooting = data.getBoolean("shooting");
+                    if(tanks.get(id) != null){
+                        tanks.get(id).shooting(shooting);
+                    }
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error getting player shooting.");
+                }
+            }
         }).on("getPlayers", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -226,6 +253,15 @@ public class PlayState extends State {
                         tanks.put(data.getJSONObject(i).getString("id"), enemy);
                         tanks.get(data.getJSONObject(i).getString("id")).setLevel(level);
                         tanks.get(data.getJSONObject(i).getString("id")).setRotation(angle);
+                        /*JSONArray bullets = data.getJSONObject(i).getJSONArray("bullets");
+                        for(int j=0; j<bullets.length(); j++){
+                            float bulletx = ((Double) bullets.getJSONObject(j).getDouble("x")).floatValue();
+                            float bullety = ((Double) bullets.getJSONObject(j).getDouble("y")).floatValue();
+                            float bulletangle = ((Double) bullets.getJSONObject(j).getDouble("rotation")).floatValue();
+                            tanks.get(data.getJSONObject(i).getString("id")).getBullets().add(
+                                    new Bullet(x, y, 0, 0, angle, thisState.getManager().get("bulletRed.png", Texture.class)));
+                        }*/
+
                     }
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting disconnected player");

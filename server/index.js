@@ -24,6 +24,10 @@ io.on('connection', function(socket){
             }
         }
     });
+    socket.on('playerShooting', function(data){
+        data.id = socket.id;
+        socket.broadcast.emit('playerShooting', data);
+    });
     socket.on('disconnect', function(){
         console.log("Player disconnected.");
         socket.broadcast.emit('playerDisconnected', {id: socket.id});
