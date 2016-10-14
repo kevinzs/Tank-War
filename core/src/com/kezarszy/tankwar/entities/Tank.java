@@ -72,7 +72,29 @@ public class Tank {
     public int getRotation() {return this.angle;}
     public void setRotation(int rotation) {this.angle = rotation;}
 
-    public void setPosition(int x, int y) {this.x = x; this.y = y;}
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+
+        polyVertices = new float[]{this.x, this.y,
+                this.x, this.y + tank.getHeight() * SIZE,
+                this.x + tank.getWidth() * SIZE - 10, this.y + tank.getHeight() * SIZE,
+                this.x + tank.getWidth() * SIZE - 10, this.y};
+        collisionPoly = new Polygon(polyVertices);
+        collisionPoly.setOrigin(this.x + (tank.getWidth()*SIZE-10)/2, this.y + (tank.getHeight()*SIZE)/2);
+
+
+        int auxX = 26, auxY = 23;
+        canonVertices = new float[]{this.x + auxX, this.y + auxY,
+                this.x + auxX, this.y + auxY + CANON_HEIGHT * SIZE - 3,
+                this.x + auxX + CANON_WIDTH * SIZE - 3, this.y + auxY + CANON_HEIGHT * SIZE - 3,
+                this.x + auxX + CANON_WIDTH * SIZE - 3, this.y + auxY};
+        canonPoly = new Polygon(canonVertices);
+        canonPoly.setOrigin(this.x + auxX, this.y + auxY + (CANON_HEIGHT*SIZE-3)/2);
+
+        collisionPrediction = new Polygon(polyVertices);
+        collisionPrediction.setOrigin(this.x + (tank.getWidth()*SIZE-10)/2, this.y + (tank.getHeight()*SIZE)/2);
+    }
 
     public void setLevel(Level level) {this.level = level;}
 
