@@ -69,6 +69,9 @@ public class Tank {
         return y;
     }
 
+    public int getRotation() {return this.angle;}
+    public void setRotation(int rotation) {this.angle = rotation;}
+
     public void setPosition(int x, int y) {this.x = x; this.y = y;}
 
     public void setLevel(Level level) {this.level = level;}

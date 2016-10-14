@@ -133,6 +133,7 @@ public class PlayState extends State {
             try{
                 data.put("x", player.getX());
                 data.put("y", player.getY());
+                data.put("rotation", player.getRotation());
                 socket.emit("playerMoved", data);
             } catch(JSONException e){
                 Gdx.app.log("SocketIO", "Error sendind update data");
@@ -203,8 +204,10 @@ public class PlayState extends State {
                     String id = data.getString("id");
                     int x = data.getInt("x");
                     int y = data.getInt("y");
+                    int angle = data.getInt("rotation");
                     if(tanks.get(id) != null){
                         tanks.get(id).setPosition(x,y);
+                        tanks.get(id).setRotation(angle);
                     }
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting player movement.");
@@ -217,10 +220,12 @@ public class PlayState extends State {
                 try {
                     for(int i=0; i<data.length(); i++){
                         int x = ((Double) data.getJSONObject(i).getDouble("x")).intValue();
-                        int y = ((Double) data.getJSONObject(i).getDouble("x")).intValue();
+                        int y = ((Double) data.getJSONObject(i).getDouble("y")).intValue();
+                        int angle = ((Double) data.getJSONObject(i).getDouble("rotation")).intValue();
                         Enemy enemy = new Enemy(x,y,thisState);
                         tanks.put(data.getJSONObject(i).getString("id"), enemy);
                         tanks.get(data.getJSONObject(i).getString("id")).setLevel(level);
+                        tanks.get(data.getJSONObject(i).getString("id")).setRotation(angle);
                     }
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting disconnected player");
