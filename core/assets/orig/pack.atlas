@@ -1,56 +1,56 @@
 
 pack.png
-size: 2048,1024
+size: 2048,2048
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 barrelGreysderust
   rotate: false
-  xy: 1518, 733
+  xy: 1542, 1702
   size: 44, 62
   orig: 44, 62
   offset: 0, 0
   index: -1
 barrelGreyside
   rotate: false
-  xy: 1106, 379
+  xy: 1028, 1237
   size: 44, 62
   orig: 44, 62
   offset: 0, 0
   index: -1
 barrelGreyup
   rotate: false
-  xy: 1707, 954
+  xy: 1288, 1466
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 grass
   rotate: false
-  xy: 1004, 490
+  xy: 1028, 1516
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
+map
+  rotate: false
+  xy: 2, 1004
+  size: 1024, 1024
+  orig: 1024, 1024
+  offset: 0, 0
+  index: -1
 metalPanel9Patch
   rotate: false
-  xy: 1004, 341
+  xy: 1028, 1367
   size: 100, 100
   split: 16, 14, 14, 14
   pad: 16, 15, 14, 14
   orig: 100, 100
   offset: 0, 0
   index: -1
-oil
-  rotate: false
-  xy: 1518, 797
-  size: 96, 96
-  orig: 96, 96
-  offset: 0, 0
-  index: -1
 redButton9Patch
   rotate: false
-  xy: 1004, 443
+  xy: 1028, 1469
   size: 190, 45
   split: 7, 8, 7, 7
   pad: 8, 8, 7, 7
@@ -59,14 +59,14 @@ redButton9Patch
   index: -1
 sandbagBeige
   rotate: false
-  xy: 1196, 444
+  xy: 1220, 1470
   size: 66, 44
   orig: 66, 44
   offset: 0, 0
   index: -1
 sandbagBrown
   rotate: false
-  xy: 1004, 295
+  xy: 1774, 1984
   size: 66, 44
   orig: 66, 44
   offset: 0, 0
@@ -78,16 +78,51 @@ terreno
   orig: 1000, 1000
   offset: 0, 0
   index: -1
+towerDefensetile132
+  rotate: false
+  xy: 1708, 1964
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+towerDefensetile134
+  rotate: false
+  xy: 1028, 1301
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+towerDefensetile135
+  rotate: false
+  xy: 1130, 1403
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+towerDefensetile136
+  rotate: false
+  xy: 1642, 1964
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+towerDefensetile137
+  rotate: false
+  xy: 1542, 1766
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 treeLarge
   rotate: false
-  xy: 1518, 895
+  xy: 1542, 1921
   size: 98, 107
   orig: 98, 107
   offset: 0, 0
   index: -1
 treeSmall
   rotate: false
-  xy: 1618, 915
+  xy: 1542, 1832
   size: 87, 87
   orig: 87, 87
   offset: 0, 0
