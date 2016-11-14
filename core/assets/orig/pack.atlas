@@ -6,23 +6,37 @@ filter: Linear,Linear
 repeat: none
 barrelGreysderust
   rotate: false
-  xy: 1542, 1702
+  xy: 1028, 1171
   size: 44, 62
   orig: 44, 62
   offset: 0, 0
   index: -1
 barrelGreyside
   rotate: false
-  xy: 1028, 1237
+  xy: 1542, 1702
   size: 44, 62
   orig: 44, 62
   offset: 0, 0
   index: -1
 barrelGreyup
   rotate: false
-  xy: 1288, 1466
+  xy: 1392, 1466
   size: 48, 48
   orig: 48, 48
+  offset: 0, 0
+  index: -1
+barsHorizontal
+  rotate: false
+  xy: 1340, 1464
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+gear
+  rotate: false
+  xy: 1288, 1464
+  size: 50, 50
+  orig: 50, 50
   offset: 0, 0
   index: -1
 grass
@@ -41,10 +55,19 @@ map
   index: -1
 metalPanel9Patch
   rotate: false
-  xy: 1028, 1367
+  xy: 1642, 1928
   size: 100, 100
   split: 16, 14, 14, 14
   pad: 16, 15, 14, 14
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+metalPanelRed
+  rotate: false
+  xy: 1028, 1367
+  size: 100, 100
+  split: 12, 12, 30, 12
+  pad: 12, 13, 30, 12
   orig: 100, 100
   offset: 0, 0
   index: -1
@@ -57,6 +80,13 @@ redButton9Patch
   orig: 190, 45
   offset: 0, 0
   index: -1
+redboxCross
+  rotate: false
+  xy: 1878, 1992
+  size: 38, 36
+  orig: 38, 36
+  offset: 0, 0
+  index: -1
 sandbagBeige
   rotate: false
   xy: 1220, 1470
@@ -66,9 +96,26 @@ sandbagBeige
   index: -1
 sandbagBrown
   rotate: false
-  xy: 1774, 1984
+  xy: 1810, 1984
   size: 66, 44
   orig: 66, 44
+  offset: 0, 0
+  index: -1
+squaRed
+  rotate: false
+  xy: 1004, 976
+  size: 19, 26
+  split: 6, 6, 6, 6
+  pad: 5, 5, 6, 6
+  orig: 19, 26
+  offset: 0, 0
+  index: -1
+squareShadow
+  rotate: false
+  xy: 1094, 1339
+  size: 19, 26
+  split: 4, 4, 5, 5
+  orig: 19, 26
   offset: 0, 0
   index: -1
 terreno
@@ -80,28 +127,28 @@ terreno
   index: -1
 towerDefensetile132
   rotate: false
-  xy: 1708, 1964
+  xy: 1028, 1235
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 towerDefensetile134
   rotate: false
-  xy: 1028, 1301
+  xy: 1130, 1403
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 towerDefensetile135
   rotate: false
-  xy: 1130, 1403
+  xy: 1744, 1964
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 towerDefensetile136
   rotate: false
-  xy: 1642, 1964
+  xy: 1028, 1301
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

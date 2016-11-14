@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class Tank {
     public static final float SIZE = 0.75f;
-    public static final float SPEED = 1f;
+    public static final float SPEED = 2f;
     public static final int ROTATION_SPEED = 1;
 
     public static final int CANON_WIDTH = 58;

@@ -72,10 +72,12 @@ public class PlayState extends State {
             if (!tanks.get(playerID).getIsAlive())
                 tanks.get(playerID).setHealth(-50);
             for (Tank tank : tanks.values()) {
-                tank.update(tanks);
-                if (!tank.getIsAlive()) {
-                    tanks.remove(tank);
-                    break;
+                if (tank != tanks.get(playerID)) {
+                    tank.update(tanks);
+                    if (!tank.getIsAlive()) {
+                        tanks.remove(tank);
+                        break;
+                    }
                 }
             }
         }

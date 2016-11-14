@@ -10,7 +10,7 @@ import com.kezarszy.tankwar.Game;
 public class Bullet {
 
     public static final float SIZE = 0.75f;
-    public static final float SPEED = 5f;
+    public static final float SPEED = 7f;
 
     private float x,y;
     private float originX, originY;
