@@ -49,55 +49,57 @@ public class Player extends Tank{
 
         hasMoved = false;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
-            collisionPrediction.translate((float) (this.dirx * SPEED), (float) (this.diry * SPEED));
-            if (!collisionDetection(collisionPrediction, tanks)) {
-                this.x += this.dirx * SPEED;
-                this.y += this.diry * SPEED;
-                collisionPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
-                canonPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
+        if(isAlive){
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
+                collisionPrediction.translate((float) (this.dirx * SPEED), (float) (this.diry * SPEED));
+                if (!collisionDetection(collisionPrediction, tanks)) {
+                    this.x += this.dirx * SPEED;
+                    this.y += this.diry * SPEED;
+                    collisionPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
+                    canonPoly.translate((float) this.dirx * SPEED, (float) this.diry * SPEED);
+                    hasMoved = true;
+                }
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
+                collisionPrediction.translate((float) (-this.dirx * SPEED), (float) (-this.diry * SPEED));
+                if (!collisionDetection(collisionPrediction, tanks)) {
+                    this.x -= this.dirx * SPEED;
+                    this.y -= this.diry * SPEED;
+                    collisionPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
+                    canonPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
+                    hasMoved = true;
+                }
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                angle = (angle + ROTATION_SPEED) % 360;
                 hasMoved = true;
             }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            collisionPrediction.setPosition(collisionPoly.getX(), collisionPoly.getY());
-            collisionPrediction.translate((float) (-this.dirx * SPEED), (float) (-this.diry * SPEED));
-            if (!collisionDetection(collisionPrediction, tanks)) {
-                this.x -= this.dirx * SPEED;
-                this.y -= this.diry * SPEED;
-                collisionPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
-                canonPoly.translate((float) -this.dirx * SPEED, (float) -this.diry * SPEED);
+            if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if(angle >= 0) angle -= ROTATION_SPEED;
+                else angle = 360;
                 hasMoved = true;
             }
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            angle = (angle + ROTATION_SPEED) % 360;
-            hasMoved = true;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            if(angle >= 0) angle -= ROTATION_SPEED;
-            else angle = 360;
-            hasMoved = true;
-        }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.H)){
-            setIsHurt(true);
-            this.health -= 25;
-        }
-
-        // FIRING LOGIC
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            firing = true;
-            long elapsed = (System.nanoTime() - firingTimer) / 1000000;
-            if(elapsed > firingDelay) {
-                playShootSound();
-                firingTimer = System.nanoTime();
-                canonTransformedVertices = canonPoly.getTransformedVertices();
-                bullets.add(new Bullet((int) canonTransformedVertices[0], (int) canonTransformedVertices[1],
-                        0, 0, angle, currentState.getManager().get("bulletBlue.png", Texture.class)));
+            if(Gdx.input.isKeyJustPressed(Input.Keys.H)){
+                setIsHurt(true);
+                this.health -= 25;
             }
-        } else firing = false;
+
+            // FIRING LOGIC
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                firing = true;
+                long elapsed = (System.nanoTime() - firingTimer) / 1000000;
+                if(elapsed > firingDelay) {
+                    playShootSound();
+                    firingTimer = System.nanoTime();
+                    canonTransformedVertices = canonPoly.getTransformedVertices();
+                    bullets.add(new Bullet((int) canonTransformedVertices[0], (int) canonTransformedVertices[1],
+                            0, 0, angle, currentState.getManager().get("bulletBlue.png", Texture.class)));
+                }
+            } else firing = false;
+        }
     }
 
     public void playShootSound(){

@@ -23,11 +23,14 @@ public class Tank {
     public static final int CANON_WIDTH = 58;
     public static final int CANON_HEIGHT = 24;
 
+    private String id;
+
     protected boolean isAlive, isHurt;
 
     protected float x, y;
     protected double dirx, diry;
     protected int angle, health;
+    protected int score;
 
     protected Texture tank;
     protected TextureRegion tankRegion;
@@ -53,6 +56,7 @@ public class Tank {
     public Tank(int x, int y) {
         this.x = x; this.y = y;
         this.angle = 0; this.health = 100;
+        this.score = 0;
         this.isAlive = true;
         this.isHurt = false;
 
@@ -69,6 +73,13 @@ public class Tank {
     public float getY() {
         return y;
     }
+
+    public int getScore() {return this.score; }
+    public void setScore(int score) { this.score = score; }
+    public void addScore(int score) { this.score += score; }
+
+    public void setID(String id) {this.id = id;}
+    public String getID() {return this.id;}
 
     public int getRotation() {return this.angle;}
     public void setRotation(int rotation) {this.angle = rotation;}
@@ -142,8 +153,9 @@ public class Tank {
             bullets.get(i).draw(sb);
 
         sb.begin();
-        sb.draw(tankRegion, this.x, this.y, (tank.getWidth()*SIZE-10)/2, (tank.getHeight()*SIZE)/2,
-                tank.getWidth()*SIZE, tank.getHeight()*SIZE,1,1,angle);
+        if(isAlive)
+            sb.draw(tankRegion, this.x, this.y, (tank.getWidth()*SIZE-10)/2, (tank.getHeight()*SIZE)/2,
+                    tank.getWidth()*SIZE, tank.getHeight()*SIZE,1,1,angle);
         sb.end();
 
         if(Game.DEBUG){
@@ -184,6 +196,7 @@ public class Tank {
                 ArrayList<Bullet> tankBullets = tank.getBullets();
                 for (Bullet bullet : tankBullets)
                     if (Intersector.overlapConvexPolygons(this.collisionPoly, bullet.getBulletPoly())) {
+                        if(this.health - 25 == 0) tank.addScore(10);
                         setHealth(this.health - 25);
                         this.setIsHurt(true);
                         tankBullets.remove(bullet);

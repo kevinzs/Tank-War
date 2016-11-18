@@ -67,7 +67,7 @@ public class PlayState extends State {
     @Override
     public void update(){
         cam.update();
-        if(tanks.get(playerID) != null) {
+        if(tanks.get(playerID) != null) { // Only do this if the player is alive
             tanks.get(playerID).update(tanks);
             if (!tanks.get(playerID).getIsAlive())
                 tanks.get(playerID).setHealth(-50);
@@ -75,7 +75,7 @@ public class PlayState extends State {
                 if (tank != tanks.get(playerID)) {
                     tank.update(tanks);
                     if (!tank.getIsAlive()) {
-                        tanks.remove(tank);
+                        tanks.remove(tank.getID());
                         break;
                     }
                 }
@@ -180,6 +180,7 @@ public class PlayState extends State {
                     tanks.put(id, new Player(100,100,thisState));
                     playerID = id;
                     tanks.get(playerID).setLevel(level);
+                    tanks.get(playerID).setID(id);
                     hud.setPlayer((Player) tanks.get(playerID));
 
                 } catch (JSONException e) {
@@ -195,6 +196,7 @@ public class PlayState extends State {
                     Gdx.app.log("SocketIO", "New player connect: " + id);
                     tanks.put(id, new Enemy(0,0, thisState));
                     tanks.get(id).setLevel(level);
+                    tanks.get(id).setID(id);
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting new player ID");
                 }
@@ -255,15 +257,6 @@ public class PlayState extends State {
                         tanks.put(data.getJSONObject(i).getString("id"), enemy);
                         tanks.get(data.getJSONObject(i).getString("id")).setLevel(level);
                         tanks.get(data.getJSONObject(i).getString("id")).setRotation(angle);
-                        /*JSONArray bullets = data.getJSONObject(i).getJSONArray("bullets");
-                        for(int j=0; j<bullets.length(); j++){
-                            float bulletx = ((Double) bullets.getJSONObject(j).getDouble("x")).floatValue();
-                            float bullety = ((Double) bullets.getJSONObject(j).getDouble("y")).floatValue();
-                            float bulletangle = ((Double) bullets.getJSONObject(j).getDouble("rotation")).floatValue();
-                            tanks.get(data.getJSONObject(i).getString("id")).getBullets().add(
-                                    new Bullet(x, y, 0, 0, angle, thisState.getManager().get("bulletRed.png", Texture.class)));
-                        }*/
-
                     }
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting disconnected player");

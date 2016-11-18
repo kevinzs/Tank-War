@@ -32,7 +32,7 @@ public class HUD {
     public void setPlayer(Player player) {this.player = player;}
 
     public void render() {
-        root.getChild("score").getEntity().getComponent(LabelComponent.class).setText("" + 1900);
+        root.getChild("score").getEntity().getComponent(LabelComponent.class).setText("" + player.getScore());
         if(!player.getIsAlive())root.getChild("healthBar").getEntity().getComponent(TransformComponent.class).x = 10000f;
         else root.getChild("healthBar").getEntity().getComponent(DimensionsComponent.class).width = player.getHealth();
         sceneLoader.getEngine().update(Gdx.graphics.getDeltaTime());
