@@ -39,7 +39,7 @@ public class LoadingState extends State{
     @Override
     public void update() {
         if(manager.update())
-            gsm.push(new PlayState(gsm,manager));
+            gsm.push(new MenuState(gsm,manager));
 
         progress = manager.getProgress() * 100;
     }
