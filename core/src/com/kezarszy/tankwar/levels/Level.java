@@ -16,6 +16,14 @@ import java.util.ArrayList;
 
 public class Level {
 
+    /** PUNTOS DE RESPAWN DEL NIVEL
+     *      1 - 100, 100 - ROTACION 0
+     *      2 - 850, 200 - ROTACION 90
+     *      3 - 800, 825 - ROTACION 180
+     *      4 - 40, 710  - ROTACION 270
+     * **/
+
+
     private SceneLoader sceneLoader;
     private ItemWrapper root;
 

@@ -3,6 +3,10 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 var players = [];
+var respawnPoints = [{x:100,y:100,rotation:0},
+                     {x:850,y:190,rotation:90},
+                     {x:800,y:825,rotation:180},
+                     {x:40,y:710,rotation:270}];
 
 server.listen(8080, function(){
     console.log("Server is now running...");
@@ -10,9 +14,29 @@ server.listen(8080, function(){
 
 io.on('connection', function(socket){
     console.log("Player connected.");
-    socket.emit('socketID', {id:socket.id});
+    switch(players.length){
+        case 0:
+            socket.emit('socketID', {id:socket.id, respawn:respawnPoints[0]});
+            socket.broadcast.emit('newPlayer', {id:socket.id});
+            break;
+        case 1:
+            socket.emit('socketID', {id:socket.id, respawn:respawnPoints[1]});
+            socket.broadcast.emit('newPlayer', {id:socket.id});
+            break;
+        case 2:
+            socket.emit('socketID', {id:socket.id, respawn:respawnPoints[2]});
+            socket.broadcast.emit('newPlayer', {id:socket.id});
+            break;
+        case 3:
+            socket.emit('socketID', {id:socket.id, respawn:respawnPoints[3]});
+            socket.broadcast.emit('newPlayer', {id:socket.id});
+            break;
+        default:
+            console.log('Servidor lleno.');
+            socket.close();
+            break;
+    }
     socket.emit('getPlayers', players);
-    socket.broadcast.emit('newPlayer', {id:socket.id});
     socket.on('playerMoved', function(data){
         data.id = socket.id;
         socket.broadcast.emit('playerMoved', data);

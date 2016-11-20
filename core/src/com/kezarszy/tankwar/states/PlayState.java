@@ -176,8 +176,11 @@ public class PlayState extends State {
                 JSONObject data = (JSONObject) args[0];
                 try {
                     String id = data.getString("id");
+                    int x = data.getJSONObject("respawn").getInt("x");
+                    int y = data.getJSONObject("respawn").getInt("y");
+                    int rotation = data.getJSONObject("respawn").getInt("rotation");
                     Gdx.app.log("SocketIO", "My ID: " + id);
-                    tanks.put(id, new Player(100,100,thisState));
+                    tanks.put(id, new Player(x,y,thisState));
                     playerID = id;
                     tanks.get(playerID).setLevel(level);
                     tanks.get(playerID).setID(id);
@@ -193,8 +196,11 @@ public class PlayState extends State {
                 JSONObject data = (JSONObject) args[0];
                 try {
                     String id = data.getString("id");
+                    int x = data.getJSONObject("respawn").getInt("x");
+                    int y = data.getJSONObject("respawn").getInt("y");
+                    int rotation = data.getJSONObject("respawn").getInt("rotation");
                     Gdx.app.log("SocketIO", "New player connect: " + id);
-                    tanks.put(id, new Enemy(0,0, thisState));
+                    tanks.put(id, new Enemy(x,y, thisState));
                     tanks.get(id).setLevel(level);
                     tanks.get(id).setID(id);
                 } catch (JSONException e) {
