@@ -24,10 +24,10 @@ import static com.badlogic.gdx.math.MathUtils.random;
 
 public class PlayState extends State {
 
-    private final float UPDATE_TIME = 1/60f;
+    private final float UPDATE_TIME = 1 / 60f;
     private float timer;
 
-    private HashMap<String,Tank> tanks;
+    private HashMap<String, Tank> tanks;
     private Level level;
 
     private HUD hud;
@@ -43,7 +43,7 @@ public class PlayState extends State {
 
     private State thisState;
 
-    public PlayState(GameStateManager gsm, AssetManager manager){
+    public PlayState(GameStateManager gsm, AssetManager manager) {
         super(gsm, manager);
         thisState = this;
 
@@ -60,14 +60,14 @@ public class PlayState extends State {
         long id = game_music.play(0.75f);
         game_music.setLooping(id, true);*/
 
-        for(Tank tank: tanks.values())
+        for (Tank tank : tanks.values())
             tank.setLevel(level);
     }
 
     @Override
-    public void update(){
+    public void update() {
         cam.update();
-        if(tanks.get(playerID) != null) { // Only do this if the player is alive
+        if (tanks.get(playerID) != null) { // Only do this if the player is alive
             tanks.get(playerID).update(tanks);
             if (!tanks.get(playerID).getIsAlive())
                 tanks.get(playerID).setHealth(-50);
@@ -88,7 +88,7 @@ public class PlayState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
-        if(tanks.get(playerID) != null) {
+        if (tanks.get(playerID) != null) {
             level.render(sb);
             tanks.get(playerID).draw(sb);
             for (Tank tank : tanks.values())
@@ -97,15 +97,37 @@ public class PlayState extends State {
         }
     }
 
-    public void updateCam(){
-        if(tanks.get(playerID) != null) {
-            if ((tanks.get(playerID).getX() > 480 && tanks.get(playerID).getX() < 520)
+    public void updateCam() {
+        if (tanks.get(playerID) != null) {
+
+            /*if ((tanks.get(playerID).getX() > 480 && tanks.get(playerID).getX() < 520)
                     && (tanks.get(playerID).getY() > 270 && tanks.get(playerID).getY() < 725))
                 this.cam.position.set(tanks.get(playerID).getX(), tanks.get(playerID).getY(), 0);
             if (tanks.get(playerID).getX() > 480 && tanks.get(playerID).getX() < 520)
                 this.cam.position.set(tanks.get(playerID).getX(), cam.position.y, 0);
             if (tanks.get(playerID).getY() > 270 && tanks.get(playerID).getY() < 725)
-                this.cam.position.set(cam.position.x, tanks.get(playerID).getY(), 0);
+                this.cam.position.set(cam.position.x, tanks.get(playerID).getY(), 0);*/
+
+
+            if (tanks.get(playerID).getX() >= 520 && tanks.get(playerID).getY() >= 725)
+                this.cam.position.set(520, 730, 0);
+            else if (tanks.get(playerID).getX() <= 480 && tanks.get(playerID).getY() <= 270)
+                this.cam.position.set(480, 270, 0);
+            else if (tanks.get(playerID).getX() >= 520 && tanks.get(playerID).getY() <= 270)
+                this.cam.position.set(520, 270, 0);
+            else if (tanks.get(playerID).getX() <= 480 && tanks.get(playerID).getY() >= 725)
+                this.cam.position.set(480, 730, 0);
+            else if (tanks.get(playerID).getX() >= 520)
+                this.cam.position.set(520, tanks.get(playerID).getY(), 0);
+            else if (tanks.get(playerID).getX() <= 480)
+                this.cam.position.set(480, tanks.get(playerID).getY(), 0);
+            else if (tanks.get(playerID).getY() >= 725)
+                this.cam.position.set(tanks.get(playerID).getX(), 730, 0);
+            else if (tanks.get(playerID).getY() <= 270)
+                this.cam.position.set(tanks.get(playerID).getX(), 270, 0);
+            else
+                this.cam.position.set(tanks.get(playerID).getX(), tanks.get(playerID).getY(), 0);
+
 
             if (tanks.get(playerID).getIsHurt()) {
                 shake(5, 200);
@@ -113,7 +135,7 @@ public class PlayState extends State {
             }
         }
 
-        if(elapsed < duration) {
+        if (elapsed < duration) {
             float currentPower = intensity * this.cam.zoom * ((duration - elapsed) / duration);
             float x = (random.nextFloat() - 0.5f) * currentPower;
             float y = (random.nextFloat() - 0.5f) * currentPower;
@@ -129,11 +151,11 @@ public class PlayState extends State {
         this.intensity = intensity;
     }
 
-    public void updateServer(float dt){
+    public void updateServer(float dt) {
         timer += dt;
         Player player = (Player) tanks.get(playerID);
-        if(timer >= UPDATE_TIME && player != null){
-            if(player.hasMoved()) {
+        if (timer >= UPDATE_TIME && player != null) {
+            if (player.hasMoved()) {
                 JSONObject data = new JSONObject();
                 try {
                     data.put("x", player.getX());
@@ -144,11 +166,11 @@ public class PlayState extends State {
                     Gdx.app.log("SocketIO", "Error sendind update data");
                 }
             }
-            if(player.isShooting()){
+            if (player.isShooting()) {
                 JSONObject data = new JSONObject();
                 try {
                     data.put("shooting", true);
-                    socket.emit("playerShooting",data);
+                    socket.emit("playerShooting", data);
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error sendind shooting data");
                 }
@@ -156,19 +178,19 @@ public class PlayState extends State {
         }
     }
 
-    public void connectSocket(){
-        try{
+    public void connectSocket() {
+        try {
             socket = IO.socket("http://localhost:8080").connect();
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public void configSocketEvents(){
+    public void configSocketEvents() {
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Gdx.app.log("SocketIO","Connected to the server.");
+                Gdx.app.log("SocketIO", "Connected to the server.");
             }
         }).on("socketID", new Emitter.Listener() {
             @Override
@@ -180,7 +202,7 @@ public class PlayState extends State {
                     int y = data.getJSONObject("respawn").getInt("y");
                     int rotation = data.getJSONObject("respawn").getInt("rotation");
                     Gdx.app.log("SocketIO", "My ID: " + id);
-                    tanks.put(id, new Player(x,y,thisState));
+                    tanks.put(id, new Player(x, y, thisState));
                     playerID = id;
                     tanks.get(playerID).setLevel(level);
                     tanks.get(playerID).setID(id);
@@ -200,7 +222,7 @@ public class PlayState extends State {
                     int y = data.getJSONObject("respawn").getInt("y");
                     int rotation = data.getJSONObject("respawn").getInt("rotation");
                     Gdx.app.log("SocketIO", "New player connect: " + id);
-                    tanks.put(id, new Enemy(x,y, thisState));
+                    tanks.put(id, new Enemy(x, y, thisState));
                     tanks.get(id).setLevel(level);
                     tanks.get(id).setID(id);
                 } catch (JSONException e) {
@@ -228,8 +250,8 @@ public class PlayState extends State {
                     int x = data.getInt("x");
                     int y = data.getInt("y");
                     int angle = data.getInt("rotation");
-                    if(tanks.get(id) != null){
-                        tanks.get(id).setPosition(x,y);
+                    if (tanks.get(id) != null) {
+                        tanks.get(id).setPosition(x, y);
                         tanks.get(id).setRotation(angle);
                     }
                 } catch (JSONException e) {
@@ -243,7 +265,7 @@ public class PlayState extends State {
                 try {
                     String id = data.getString("id");
                     boolean shooting = data.getBoolean("shooting");
-                    if(tanks.get(id) != null){
+                    if (tanks.get(id) != null) {
                         tanks.get(id).shooting(shooting);
                     }
                 } catch (JSONException e) {
@@ -255,11 +277,11 @@ public class PlayState extends State {
             public void call(Object... args) {
                 JSONArray data = (JSONArray) args[0];
                 try {
-                    for(int i=0; i<data.length(); i++){
+                    for (int i = 0; i < data.length(); i++) {
                         int x = ((Double) data.getJSONObject(i).getDouble("x")).intValue();
                         int y = ((Double) data.getJSONObject(i).getDouble("y")).intValue();
                         int angle = ((Double) data.getJSONObject(i).getDouble("rotation")).intValue();
-                        Enemy enemy = new Enemy(x,y,thisState);
+                        Enemy enemy = new Enemy(x, y, thisState);
                         tanks.put(data.getJSONObject(i).getString("id"), enemy);
                         tanks.get(data.getJSONObject(i).getString("id")).setLevel(level);
                         tanks.get(data.getJSONObject(i).getString("id")).setRotation(angle);
@@ -274,7 +296,7 @@ public class PlayState extends State {
     @Override
     public void dispose() {
         tanks.get(playerID).dispose();
-        for(Tank tank: tanks.values())
+        for (Tank tank : tanks.values())
             tank.dispose();
     }
 }

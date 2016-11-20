@@ -14,22 +14,35 @@ server.listen(8080, function(){
 
 io.on('connection', function(socket){
     console.log("Player connected.");
+    var x, y, rotation;
     switch(players.length){
         case 0:
             socket.emit('socketID', {id:socket.id, respawn:respawnPoints[0]});
-            socket.broadcast.emit('newPlayer', {id:socket.id});
+            socket.broadcast.emit('newPlayer', {id:socket.id, respawn:respawnPoints[0]});
+            x = respawnPoints[0].x;
+            y = respawnPoints[0].y;
+            rotation = respawnPoints[0].rotation;
             break;
         case 1:
             socket.emit('socketID', {id:socket.id, respawn:respawnPoints[1]});
-            socket.broadcast.emit('newPlayer', {id:socket.id});
+            socket.broadcast.emit('newPlayer', {id:socket.id, respawn:respawnPoints[1]});
+            x = respawnPoints[1].x;
+            y = respawnPoints[1].y;
+            rotation = respawnPoints[1].rotation;
             break;
         case 2:
             socket.emit('socketID', {id:socket.id, respawn:respawnPoints[2]});
-            socket.broadcast.emit('newPlayer', {id:socket.id});
+            socket.broadcast.emit('newPlayer', {id:socket.id, respawn:respawnPoints[2]});
+            x = respawnPoints[2].x;
+            y = respawnPoints[2].y;
+            rotation = respawnPoints[2].rotation;
             break;
         case 3:
             socket.emit('socketID', {id:socket.id, respawn:respawnPoints[3]});
-            socket.broadcast.emit('newPlayer', {id:socket.id});
+            socket.broadcast.emit('newPlayer', {id:socket.id, respawn:respawnPoints[3]});
+            x = respawnPoints[3].x;
+            y = respawnPoints[3].y;
+            rotation = respawnPoints[3].rotation;
             break;
         default:
             console.log('Servidor lleno.');
@@ -61,7 +74,7 @@ io.on('connection', function(socket){
             }
         }
     });
-    players.push(new player(socket.id, 0, 0, 0));
+    players.push(new player(socket.id, x, y, rotation));
 });
 
 function player(id, x, y, rotation){
